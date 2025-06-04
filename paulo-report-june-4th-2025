@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Discussion - Leadership Accountability</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #28A019 0%, #1e7912 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .presentation-container {
+            width: 90%;
+            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .slide {
+            display: none;
+            padding: 50px;
+            min-height: 650px;
+            position: relative;
+        }
+
+        .slide.active {
+            display: block;
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .slide-header {
+            border-bottom: 3px solid #28A019;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .slide-number {
+            color: #28A019;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h2 {
+            color: #34495e;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #28A019;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+            color: #555;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        li::before {
+            content: "▸";
+            color: #28A019;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #e8f5e5 0%, #c8e6c0 100%);
+            padding: 18px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #28A019;
+        }
+
+        .critical {
+            background: linear-gradient(120deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 18px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .warning {
+            background: linear-gradient(120deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 18px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #f39c12;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: rgba(40, 160, 25, 0.9);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn:hover {
+            background: rgba(40, 160, 25, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 160, 25, 0.4);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .slide-counter {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: rgba(40, 160, 25, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #28A019;
+            font-weight: 600;
+        }
+
+        .timeline-item {
+            border-left: 3px solid #28A019;
+            padding-left: 20px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: "";
+            width: 10px;
+            height: 10px;
+            background: #28A019;
+            border-radius: 50%;
+            position: absolute;
+            left: -6px;
+            top: 5px;
+        }
+
+        .date {
+            color: #28A019;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .action-needed {
+            background: linear-gradient(120deg, #e8f5e5 0%, #d4f0cf 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #28A019;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .pattern-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #e74c3c;
+        }
+
+        .impact-stat {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .impact-stat .number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28A019;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <div class="slide-counter">
+            <span id="current-slide">1</span> / <span id="total-slides">12</span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <div class="slide-header">
+                <div class="slide-number">SLIDE 1</div>
+                <h1>Executive Leadership Accountability</h1>
+            </div>
+            <div style="text-align: center; margin-top: 80px;">
+                <h2 style="color: #28A019; font-size: 28px;">Systemic Failures Across Multiple Domains</h2>
+                <div style="margin-top: 40px; color: #666; font-size: 18px;">
+                    <p><strong>Paulo Amorim</strong> - Software Developmer / Acting Software Development Manager</p>
+                    <p style="margin-top: 20px;">Meeting with Dima (CEO) & Tiago (CTO)</p>
+                    <p style="margin-top: 10px; font-size: 14px; color: #999;">Comprehensive Timeline: 2023-2025</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Executive Summary -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">SLIDE 2</div>
+                <h1>Executive Summary</h1>
+            </div>
+            <div class="critical">
+                <h3>Systemic Leadership Failures Pattern</h3>
+                <p>Performance management, quality control, process oversight, authority recognition, and decision-making demonstrate consistent inability to maintain organizational standards and follow through on commitments.</p>
+            </div>
+            
+            <div class="two-column">
+                <div class="impact-stat">
+                    <div class="number">1+ Year</div>
+                    <div>Unresolved Performance Issues</div>
+                </div>
+                <div class="impact-stat">
+                    <div class="number">8 Hours</div>
+                    <div>Potential Production Outage Risk</div>
+                </div>
+            </div>
+
+            <h2>Critical Domains Affected:</h2>
+            <ul>
+                <li><strong>Authority Recognition:</strong> TPM, Project Manager, Design Lead, QA Lead roles systematically unmanaged and undermined</li>
+                <li><strong>Process Discipline:</strong> Security protocols ignored, causing preventable incidents</li>
+                <li><strong>Quality Control:</strong> Substandard external representations damaging brand</li>
+                <li><strong>Communication:</strong> Critical decisions made in DMs, stakeholders excluded</li>
+                <li><strong>Accountability:</strong> Consistent avoidance of responsibility for failures</li>
+            </ul>
+        </div>
+
+        <!-- Slide 3: The Rubiana Situation -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">SLIDE 3</div>
+                <h1>Case Study 1: The Rubiana Situation</h1>
+            </div>
+            <div class="timeline-item">
+                <div class="date">2024-2025</div>
+                <p><strong>Hired as QA Engineer:</strong> Over 1 year of consistent underperformance, half-measure efforts, team disruption</p>
+            </div>
+            <div class="timeline-item">
+                <div class="date">Early 2025</div>
+                <p><strong>Gabriel Leadership Proposal:</strong> Tiago suggests trusted Senior Engineer lead QA efforts</p>
+            </div>
+            <div class="timeline-item">
+                <div class="date">Mid 2025</div>
+                <p><strong>Authority Reversal:</strong> Rubiana refuses, claims "QA should lead development" - Tiago reverses decision</p>
+            </div>
+            <div class="timeline-item">
+                <div class="date">May 13, 2025</div>
+                <p><strong>15-Day Paralysis:</strong> Options presented (switch/terminate) but no decision process established</p>
+            </div>
+
+            <div class="pattern-box">
+                <h3>Leadership Failure Pattern:</h3>
+                <p>Year-long tolerance of poor performance → Sound management decision → Reversal when challenged by underperformer → Scope creep, misalignment, progress loss → Continued paralysis</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Brand Quality Control Disaster -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">SLIDE 4</div>
+                <h1>Case Study 2: Chicago Event Brand Disaster</h1>
+            </div>
+            <div class="critical">
+                <h3>May 20, 2025 - Public Embarrassment at Major Industry Event</h3>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="date">3:12 PM</div>
+                <p><strong>Quality Crisis Identified:</strong> "Low quality poster hurts product image" - Poor fonts, misaligned logo, broken hierarchy, unauthorized colors</p>
+            </div>
+            <div class="timeline-item">
+                <div class="date">3:33 PM</div>
+                <p><strong>Design Professional Assessment:</strong> Osa: "Makes me sick to look at... designed on Microsoft Paint"</p>
+            </div>
+            <div class="timeline-item">
+                <div class="date">4:01 PM</div>
+                <p><strong>Process Violation:</strong> Used Osa's podcast concept without consultation, bypassing design authority</p>
+            </div>
+            <div class="timeline-item">
+                <div class="date">4:40 PM</div>
+                <p><strong>Mobile Disaster:</strong> Completely broken responsive design, "horrible look for us"</p>
+            </div>
+
+            <div class="warning">
+                <h3>Team Response:</h3>
+                <p><strong>Paulo:</strong> "If anyone asked if I worked for that company, I would be ashamed to admit so"</p>
+                <p><strong>Osa:</strong> "Bad work, full stop. Genuinely hurts the brand"</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: The Sentry Authority Crisis -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">SLIDE 5</div>
+                <h1>Case Study 3: Sentry Implementation Authority Crisis</h1>
+            </div>
+            <div class="highlight">
+                <h3>Monday, May 26: Leadership Commits to Transparency & Collaboration</h3>
+            </div>
+
+            <div class="critical">
+                <h3>Tuesday, May 27: Commitment Immediately Violated</h3>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="date">Process Established</div>
+                <p><strong>Paulo assigned as Project Manager by Tiago:</strong> Explicitly states security validation required before development > staging deployment</p>
+            </div>
+            <div class="timeline-item">
+                <div class="date">Same Day Violation</div>
+                <p><strong>Authority Bypassed:</strong> Task assigned to Gabriel, merged without consultation, DM decisions bypass Project Manager authority</p>
+            </div>
+            <div class="timeline-item">
+                <div class="date">Predictable Result</div>
+                <p><strong>Staging Outage:</strong> Exactly as warned - could have been 8-hour production disaster</p>
+            </div>
+
+            <div class="pattern-box">
+                <h3>24-Hour Commitment Breach:</h3>
+                <p>Monday: Promise transparency/collaboration → Tuesday: Bypass assigned Project Manager authority → Wednesday: Incident occurs as predicted → Accountability avoided</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Pattern of Accountability Avoidance -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">SLIDE 6</div>
+                <h1>Pattern of Accountability Avoidance</h1>
+            </div>
+            <h2>Specific Leadership Failures:</h2>
+            
+            <div class="two-column">
+                <div>
+                    <h3>Dima (CEO):</h3>
+                    <ul>
+                        <li>Reports staging outage, later claims non-involvement</li>
+                        <li>Forgets design feedback for weeks until reminded</li>
+                        <li>Dismissive response despite flagging the incident</li>
+                        <li>Executive meeting decisions made without stakeholder inclusion</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Tiago (CTO):</h3>
+                    <ul>
+                        <li>Allows work against Paulo's explicit Project Manager instructions</li>
+                        <li>Critical decisions made in DMs bypassing proper channels</li>
+                        <li>Failed root cause analysis in incident report</li>
+                        <li>Characterizes transparency as "harsh escalation"</li>
+                        <li>Suggests "summarizing" concerns rather than addressing them</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="warning">
+                <h3>Communication Pattern:</h3>
+                <ul>
+                    <li>15-day silence on critical personnel decisions</li>
+                    <li>DM decisions excluding key stakeholders</li>
+                    <li>Treating accountability requests as escalation</li>
+                    <li>Work-life boundary violations (Late night calls for preventable issues)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 7: Broader Organizational Impact -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">SLIDE 7</div>
+                <h1>Organizational Impact Assessment</h1>
+            </div>
+            <h2>Business Risk & Credibility:</h2>
+            <ul>
+                <li><strong>Production Risk:</strong> 8-hour potential downtime from ignored security protocols</li>
+                <li><strong>Brand Damage:</strong> Public embarrassment at major industry event</li>
+                <li><strong>Client Confidence:</strong> Substandard external representations</li>
+                <li><strong>Process Breakdown:</strong> Critical processes bypassed creating recurring incidents</li>
+            </ul>
+
+            <h2>Team Morale & Professional Standards:</h2>
+            <ul>
+                <li><strong>Expertise Devaluation:</strong> Gabriel, Osa, Paulo consistently undermined</li>
+                <li><strong>Authority Meaningless:</strong> TPM, Project Manager, Design Lead, QA Lead roles rendered ineffective</li>
+                <li><strong>Professional Shame:</strong> Team expressing embarrassment about company</li>
+                <li><strong>Boundary Violations:</strong> Emergency calls for preventable issues</li>
+                <li><strong>Role-Reality Disconnect:</strong> Tech team contracts vs. assigned responsibilities vs. public titles</li>
+            </ul>
+
+            <div class="critical">
+                <h3>Small Team, Big Impact:</h3>
+                <p><strong>~20 Contributors:</strong> Highly motivated team wanting to drive business forward but self-reporting feeling misled, disrespected, confused, demotivated, and approaching burnout due to leadership failures.</p>
+                <p><strong>Scale Concern:</strong> If process breakdown occurs with 20 people, expansion would be catastrophic without systematic reform.</p>
+            </div>
+
+            <div class="critical">
+                <h3>Osa's Process Improvement Initiatives:</h3>
+                <p>Repeatedly blocked by executive leadership's reluctance to share control or implement systematic changes. Pattern of identifying solutions but being prevented from implementing them.</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Paulo's Defensive Response -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">SLIDE 8</div>
+                <h1>Formal Withdrawal & Boundary Setting</h1>
+            </div>
+            <div class="critical">
+                <h3>Public Declaration</h3>
+                <p><em>"I'm withdrawing my availability to participate in any initiative or duties not related to my contracted role as 'Software Developer'"</em></p>
+            </div>
+            
+            <h2>Specific Withdrawals:</h2>
+            <ul>
+                <li>Process-building initiatives</li>
+                <li>Thursday "Roadmap planning" meeting</li>
+                <li>Any Project Manager responsibilities beyond development tasks</li>
+                <li>Additional responsibilities without proper authority support</li>
+            </ul>
+
+            <h2>Professional Boundaries Established:</h2>
+            <ul>
+                <li>No late night calls for issues caused by ignored protocols</li>
+                <li>Meeting agendas required in advance</li>
+                <li>Transparent communication across all relevant channels</li>
+                <li>Written documentation preferred over verbal commitments</li>
+            </ul>
+
+            <div class="highlight">
+                <p><strong>Rationale:</strong> High-performing contributor protecting professional reputation from systemic leadership dysfunction while maintaining commitment to quality work.</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Standards & Expectations Gap -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">SLIDE 9</div>
+                <h1>Standards & Expectations Gap</h1>
+            </div>
+            <div class="highlight">
+                <h3>Friday's Direct Question to Leadership:</h3>
+                <p><em>"Can I trust you both to commit to higher standards of transparency and effectiveness at Pandatron?"</em></p>
+            </div>
+
+            <h2>Business Seriousness Concerns:</h2>
+            <ul>
+                <li>Contributors not being valued appropriately and deserve to be taken seriously</li>
+                <li>Lack of commitment to treating Pandatron as a serious business</li>
+                <li>Work continuing in "silos" - exact opposite of Monday's collaboration promise</li>
+                <li>Performance standards exceeding organizational follow-through</li>
+            </ul>
+
+            <h2>Work Quality vs. Leadership Support:</h2>
+            <ul>
+                <li><strong>Delivered Excellence:</strong> Onboarding/Admin Pages workshop left everyone excited</li>
+                <li><strong>Unmatched Effort:</strong> Leadership support not matching contribution level</li>
+                <li><strong>Disconnect:</strong> High performance standards vs. organizational dysfunction</li>
+            </ul>
+
+            <div class="warning">
+                <h3>Current Emotional State:</h3>
+                <p><strong>Disappointment, not anger.</strong> Seeking accountability and proper business practices to match personal commitment level.</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Root Cause Analysis -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">SLIDE 10</div>
+                <h1>Root Cause Analysis</h1>
+            </div>
+            <div class="pattern-box">
+                <h3>Leadership Pattern Revealed:</h3>
+                <ul>
+                    <li><strong>Systematically undermines assigned authority</strong> (TPM, Project Manager, Design Lead, QA Lead roles meaningless)</li>
+                    <li><strong>Ignores established processes</strong> leading to preventable incidents and quality failures</li>
+                    <li><strong>Makes commitments without intention to honor them</strong> (Monday pledge violated Tuesday)</li>
+                    <li><strong>Avoids accountability</strong> for decisions creating business risk and team dysfunction</li>
+                    <li><strong>Treats professional standards as optional</strong> rather than foundational business requirements</li>
+                </ul>
+            </div>
+
+            <h2>Systemic Issues:</h2>
+            <div class="two-column">
+                <div>
+                    <h3>Authority Crisis:</h3>
+                    <ul>
+                        <li>Assigned roles carry no actual power</li>
+                        <li>Expertise consistently dismissed</li>
+                        <li>Sound decisions reversed by complaints</li>
+                        <li><strong>Contract-Reality Gap:</strong> All tech team contracted as "Software Developers" but assigned Technical Project Manager, Project Manager, Lead roles without contract updates</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Process Breakdown:</h3>
+                    <ul>
+                        <li>Security protocols ignored</li>
+                        <li>Quality control non-existent</li>
+                        <li>Communication channels bypassed</li>
+                        <li><strong>Legal Compliance Risk:</strong> Role assignments without proper documentation</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="critical">
+                <h3>Organizational Maturity Gap:</h3>
+                <p>Leadership demonstrates inability to transition from startup chaos to professional business operations, resulting in talent flight and operational risk.</p>
+            </div>
+
+            <div class="warning">
+                <h3>June 2, 2025 - Contractual Integrity Crisis:</h3>
+                <p><strong>Dima's Admission:</strong> Sales contributor publicly listed as "Director of Growth and Strategic Partnership" on LinkedIn</p>
+                <p><strong>CMO Title Inflation:</strong> Marketing contributor involved in Chicago design crisis holds "Chief Marketing Officer" public title</p>
+                <p><strong>CEO Response:</strong> "Those titles are just for public appearance, to make them look more respectable to outsiders"</p>
+                <p><strong>Legal Concern:</strong> Potential violation of Finnish employment law - role reality vs. contracts vs. public representation</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Critical Discussion Points -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">SLIDE 11</div>
+                <h1>Critical Discussion Points for Leadership</h1>
+            </div>
+            <h2>Immediate Crisis Management:</h2>
+            <ul>
+                <li><strong>Sentry Incident:</strong> Why was Paulo's explicit Project Manager authority disregarded?</li>
+                <li><strong>Chicago Event:</strong> Who is responsible for brand quality control failures?</li>
+                <li><strong>Monday Commitments:</strong> How will leadership address 24-hour promise-breaking?</li>
+                <li><strong>Rubiana Resolution:</strong> What prevents decisive action on year-long performance issues?</li>
+            </ul>
+
+            <h2>Systemic Reform Requirements:</h2>
+            <ul>
+                <li><strong>Authority Recognition:</strong> What actual power will designated roles have?</li>
+                <li><strong>Process Discipline:</strong> What non-negotiable procedures will be enforced?</li>
+                <li><strong>Communication Standards:</strong> How will DM decisions and stakeholder exclusion be prevented?</li>
+                <li><strong>Quality Control:</strong> What approval processes prevent external embarrassment?</li>
+                <li><strong>Contractual Integrity:</strong> How will role assignments match legal documentation and compensation?</li>
+                <li><strong>Public Representation:</strong> What standards prevent misleading external titles?</li>
+            </ul>
+
+            <div class="action-needed">
+                <h3>Leadership Development Questions:</h3>
+                <ul>
+                    <li>What training addresses the pattern of authority undermining?</li>
+                    <li>How will leadership demonstrate matching commitment to professional standards?</li>
+                    <li>What accountability measures ensure follow-through on processes?</li>
+                    <li>How will credibility be rebuilt after repeated commitment failures?</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 12: Required Actions & Success Metrics -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">SLIDE 12</div>
+                <h1>Required Actions & Success Metrics</h1>
+            </div>
+            <div class="action-needed">
+                <h3>Immediate Requirements:</h3>
+                <ul>
+                    <li><strong>Acknowledge specific failures</strong> outlined across all domains</li>
+                    <li><strong>Commit to concrete corrective actions</strong> with timelines and ownership</li>
+                    <li><strong>Respect established authority</strong> - TPM, Project Manager, Design Lead, QA Lead roles must carry decision power</li>
+                    <li><strong>Implement proper communication channels</strong> - end DM critical decisions</li>
+                    <li><strong>Address Rubiana situation</strong> with firm timeline after 1+ year delay</li>
+                </ul>
+            </div>
+            
+            <h2>Success Metrics:</h2>
+            <ul>
+                <li><strong>Follow-through:</strong> Leadership honors commitments made (not broken within 24 hours)</li>
+                <li><strong>Authority Respect:</strong> Project management and expert decisions are supported</li>
+                <li><strong>Quality Standards:</strong> No external representations without proper approval</li>
+                <li><strong>Professional Communication:</strong> Stakeholder inclusion, proper channels used</li>
+                <li><strong>Team Value:</strong> Contributors feel taken seriously and appropriately valued</li>
+            </ul>
+
+            <div class="critical">
+                <h3>Bottom Line Decision Point:</h3>
+                <p><strong>Either:</strong> Leadership demonstrates genuine commitment to professional standards, process discipline, and authority respect</p>
+                <p><strong>Or:</strong> Continue losing credibility and talent while accumulating business risk through preventable failures</p>
+                <p style="margin-top: 15px;"><em>Paulo remains focused solely on software development tasks until leadership matches his commitment level to treating Pandatron as a serious business.</em></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 12;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            const currentSlideSpan = document.getElementById('current-slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            if (n > totalSlides) currentSlide = totalSlides;
+            if (n < 1) currentSlide = 1;
+
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[currentSlide - 1].classList.add('active');
+
+            currentSlideSpan.textContent = currentSlide;
+
+            prevBtn.disabled = currentSlide === 1;
+            nextBtn.disabled = currentSlide === totalSlides;
+        }
+
+        function changeSlide(n) {
+            currentSlide += n;
+            showSlide(currentSlide);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+            if (e.key === 'Home') { currentSlide = 1; showSlide(currentSlide); }
+            if (e.key === 'End') { currentSlide = totalSlides; showSlide(currentSlide); }
+        });
+
+        // Initialize
+        document.getElementById('total-slides').textContent = totalSlides;
+        showSlide(1);
+    </script>
+</body>
+</html>
